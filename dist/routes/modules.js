@@ -50,10 +50,11 @@ exports.joiShemaLog = joiShemaLog;
 var authenticateToken = function (req, res, next) {
     var token = req.cookies.jwtToken;
     if (!token)
-        return res.sendStatus(401);
+        return res.status(401).redirect('/login');
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (error, user) {
         if (error)
-            return res.sendStatus(403);
+            return res.status(403).redirect('/login');
+        // console.log('user is still logged in')
         req.user = user;
         next();
     });

@@ -7,11 +7,7 @@ import { joiShemaReg, joiShemaLog, authenticateToken, createToken, readDbData, r
 
 const router = express.Router();
 
-let key: number [] = []
-
-router.get('/', (req: Request, res: Response, next: NextFunction) =>{
-  if (key.length === 0) res.render('login')
-  else {
+router.get('/', authenticateToken, (req: Request, res: Response, next: NextFunction) =>{
 
     let data = readDbData()
      
@@ -19,13 +15,17 @@ router.get('/', (req: Request, res: Response, next: NextFunction) =>{
     title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
     customers: data
 })
-  }
 
 })
 
+router.get('/logout', authenticateToken,(req: Request, res: Response, next: NextFunction)=>{
+  res.clearCookie('jwtToken')
+  // console.log('logged out user.')
+  res.redirect('/login')
+} )
+
 router.get('/login', (req: Request, res: Response, next: NextFunction) =>{
     res.render('login')
-    key.pop()
 })
 
 router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
@@ -53,17 +53,19 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
      else {
 
       createToken(username, res)
-
-      let data = readDbData()
-
-      res.render('index_customers', { 
-      title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
-      customers: data
-  })
-    key.push(1)
+      res.redirect('/homepage')
+      
      }
 
 }}})
+
+router.get('/homepage',authenticateToken, (req: Request, res: Response, next: NextFunction) => {
+  let data = readDbData()
+  res.render('index_customers', { 
+  title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
+  customers: data
+})
+})
 
 router.post('/register', async(req: Request, res: Response, next: NextFunction) => {
 
@@ -111,7 +113,7 @@ router.get('/add', authenticateToken, (req: Request, res: Response, next: NextFu
   })
 })
 
-router.post('/save', (req: Request, res: Response, next: NextFunction) => {
+router.post('/save', authenticateToken, (req: Request, res: Response, next: NextFunction) => {
 
   let data = readDbData()
 
@@ -132,7 +134,6 @@ router.post('/save', (req: Request, res: Response, next: NextFunction) => {
       writeData(data)
       res.status(201)
       res.redirect('/')
-      key.push(1)
 })
 
 router.get('/edit/:id', authenticateToken, (req: Request, res: Response, next: NextFunction) => {
@@ -146,7 +147,7 @@ router.get('/edit/:id', authenticateToken, (req: Request, res: Response, next: N
   })
 })
 
-router.post('/update', (req: Request, res: Response, next: NextFunction) => {
+router.post('/update', authenticateToken, (req: Request, res: Response, next: NextFunction) => {
 
   let data = readDbData()
 
@@ -166,7 +167,6 @@ router.post('/update', (req: Request, res: Response, next: NextFunction) => {
         writeData(data)
         res.status(202)
         res.redirect('/')
-        key.push(1)
     })
 
 router.get('/delete/:id',authenticateToken, (req: Request, res: Response, next: NextFunction) =>{
@@ -185,7 +185,6 @@ router.get('/delete/:id',authenticateToken, (req: Request, res: Response, next: 
     writeData(data)
     res.status(200)
     res.redirect('/')
-    key.push(1)
      
 })
 

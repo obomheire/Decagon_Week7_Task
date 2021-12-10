@@ -31,12 +31,12 @@ export let authenticateToken = (req:Request, res:Response, next:NextFunction) =>
 
 const token = req.cookies.jwtToken;
 
-if (!token) return res.sendStatus(401)
+if (!token) return res.status(401).redirect('/login')
 
 jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error:Error, user:any) => {
 
-  if (error) return res.sendStatus(403)
-
+  if (error) return res.status(403).redirect('/login')
+  // console.log('user is still logged in')
   req.user = user
 
   next()

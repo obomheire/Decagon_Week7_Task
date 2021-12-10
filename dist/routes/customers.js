@@ -44,24 +44,23 @@ var bcrypt_1 = __importDefault(require("bcrypt"));
 var jwt = require('jsonwebtoken');
 var modules_1 = require("./modules");
 var router = express_1.default.Router();
-var key = [];
-router.get('/', function (req, res, next) {
-    if (key.length === 0)
-        res.render('login');
-    else {
-        var data = (0, modules_1.readDbData)();
-        res.render('index_customers', {
-            title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
-            customers: data
-        });
-    }
+router.get('/', modules_1.authenticateToken, function (req, res, next) {
+    var data = (0, modules_1.readDbData)();
+    res.render('index_customers', {
+        title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
+        customers: data
+    });
+});
+router.get('/logout', modules_1.authenticateToken, function (req, res, next) {
+    res.clearCookie('jwtToken');
+    // console.log('logged out user.')
+    res.redirect('/login');
 });
 router.get('/login', function (req, res, next) {
     res.render('login');
-    key.pop();
 });
 router.post('/login', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var userRecord, _a, username, password, result, loginUser, validatePassword, data;
+    var userRecord, _a, username, password, result, loginUser, validatePassword;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -83,18 +82,20 @@ router.post('/login', function (req, res, next) { return __awaiter(void 0, void 
                     res.render('incorrect_login');
                 else {
                     (0, modules_1.createToken)(username, res);
-                    data = (0, modules_1.readDbData)();
-                    res.render('index_customers', {
-                        title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
-                        customers: data
-                    });
-                    key.push(1);
+                    res.redirect('/homepage');
                 }
                 _b.label = 3;
             case 3: return [2 /*return*/];
         }
     });
 }); });
+router.get('/homepage', modules_1.authenticateToken, function (req, res, next) {
+    var data = (0, modules_1.readDbData)();
+    res.render('index_customers', {
+        title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM',
+        customers: data
+    });
+});
 router.post('/register', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var userRecord, _a, username, email, password1, password2, result, salt, hashed, user, regData;
     return __generator(this, function (_b) {
@@ -138,7 +139,7 @@ router.get('/add', modules_1.authenticateToken, function (req, res, next) {
         title: 'CUSTOMER RELASHIONSHIP MANAGEMENT SYSTEM'
     });
 });
-router.post('/save', function (req, res, next) {
+router.post('/save', modules_1.authenticateToken, function (req, res, next) {
     var data = (0, modules_1.readDbData)();
     var _a = req.body, fullname = _a.fullname, email = _a.email, gender = _a.gender, phone = _a.phone, address = _a.address, notes = _a.notes;
     var customer = {
@@ -154,7 +155,6 @@ router.post('/save', function (req, res, next) {
     (0, modules_1.writeData)(data);
     res.status(201);
     res.redirect('/');
-    key.push(1);
 });
 router.get('/edit/:id', modules_1.authenticateToken, function (req, res, next) {
     var data = (0, modules_1.readDbData)();
@@ -164,7 +164,7 @@ router.get('/edit/:id', modules_1.authenticateToken, function (req, res, next) {
         customer: customerData
     });
 });
-router.post('/update', function (req, res, next) {
+router.post('/update', modules_1.authenticateToken, function (req, res, next) {
     var data = (0, modules_1.readDbData)();
     var customer = data.find(function (value) { return value.customerid === parseInt(req.body.id); });
     if (!customer)
@@ -179,7 +179,6 @@ router.post('/update', function (req, res, next) {
     (0, modules_1.writeData)(data);
     res.status(202);
     res.redirect('/');
-    key.push(1);
 });
 router.get('/delete/:id', modules_1.authenticateToken, function (req, res, next) {
     var data = (0, modules_1.readDbData)();
@@ -192,6 +191,5 @@ router.get('/delete/:id', modules_1.authenticateToken, function (req, res, next)
     (0, modules_1.writeData)(data);
     res.status(200);
     res.redirect('/');
-    key.push(1);
 });
 exports.default = router;

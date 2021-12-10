@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+
+<!-- HTML Meta Tags -->
+<title>Decagon Week7 Task</title>
+<meta name="description" content="User login authorization and authentication">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="h">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Decagon Week7 Task">
+<meta property="og:description" content="User login authorization and authentication">
+<meta property="og:image" content="https://www.logsign.com/uploads/authorization_and_authentication_0e0a962e49.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="">
+<meta property="twitter:url" content="h">
+<meta name="twitter:title" content="Decagon Week7 Task">
+<meta name="twitter:description" content="User login authorization and authentication">
+<meta name="twitter:image" content="https://www.logsign.com/uploads/authorization_and_authentication_0e0a962e49.png">
+
+<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+      
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2><%= title %></h2>
+   <form action="/update" method="post">
+    <div class="form-group" >
+        <input type="text" class="form-control" id="customerid" value="<%= customer.customerid %>" name="id">
+        <label for="fullname">Full Name:</label>
+        <input type="text" class="form-control" id="fullname" value="<%= customer.fullname %>" name="fullname">
+    </div>
+
+    <div class="form-group" >
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" value="<%= customer.email %>" name="email">
+    </div>
+
+    <div class="form-group" >
+        <label for="gender">Gender:</label>
+        <input type="text" class="form-control" id="gender" value="<%= customer.gender %>" name="gender">
+    </div>
+
+    <div class="form-group" >
+        <label for="phone">Phone Number:</label>
+        <input type="text" class="form-control" id="phone" value="<%= customer.phone %>" name="phone">
+    </div>
+
+    <div class="form-group" >
+        <label for="address">Home Address:</label>
+        <input type="text" class="form-control" id="address" value="<%= customer.address %>" name="address">
+    </div>
+
+    <div class="form-group" >
+        <label for="notes">Leave a Note:</label>
+        <input type="text" class="form-control" id="notes" value="<%= customer.notes%>" name="notes">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Record</button>
+   </form>
+    
+    </div>
+    <!-- <script src="../dist/app.js"></script> -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
